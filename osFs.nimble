@@ -9,4 +9,4 @@ srcDir        = "src"
 # Dependencies
 
 requires "nim >= 2.0.2"
-requires "commonFs >= 0.1.0"
+requires "commonFs ^= 0.1.0"
