@@ -16,33 +16,41 @@ suite "OsFs.createDir":
     removeDir(testDirPath, false)
 
   test "should create a directory using an absolute path":
-    let dirRelative = "testDir1".Path
-    let dirAbsolute = testDirPath / dirRelative
-    fs.createDir(dirAbsolute)
-    check(fs.dirExists(dirAbsolute))
+    let pathRelative = "testDir1".Path
+    let pathAbsolute = testDirPath / pathRelative
+    let dir = fs.createDir pathAbsolute
+    check fs.dirExists pathAbsolute
+    check dir.absolutePath == pathAbsolute
+    check dir.exists
 
   test "should create a directory using a relative path":
-    let dirRelative = "testDir2".Path
-    let dirAbsolute = testDirPath / dirRelative
+    let pathRelative = "testDir2".Path
+    let pathAbsolute = testDirPath / pathRelative
     fs.currentDir = testDirPath
-    fs.createDir(dirRelative)
-    check(fs.dirExists(dirAbsolute))
+    let dir = fs.createDir pathRelative 
+    check fs.dirExists pathAbsolute
+    check dir.absolutePath == pathAbsolute
+    check dir.exists
 
   test "should create a directory using an absolute path when the current directory is set":
-    let dirRelative = "testDir3".Path
-    let dirAbsolute = testDirPath / dirRelative
-    fs.createDir(dirAbsolute)
-    check(fs.dirExists(dirAbsolute))
+    let pathRelative = "testDir3".Path
+    let pathAbsolute = testDirPath / pathRelative
+    let dir = fs.createDir pathAbsolute
+    check fs.dirExists pathAbsolute
+    check dir.absolutePath == pathAbsolute
+    check dir.exists
 
   test "should throw an exception when creating a directory with the same name as an existing file":
-    let dirRelative = "testDir4".Path
-    let dirAbsolute = testDirPath / dirRelative
-    open(dirAbsolute.string, fmWrite).close() # Create a file with the same name as the directory
+    let pathRelative = "testDir4".Path
+    let pathAbsolute = testDirPath / pathRelative
+    open(pathAbsolute.string, fmWrite).close() # Create a file with the same name as the directory
     expect CatchableError:
-      fs.createDir(dirAbsolute)
+      fs.createDir pathAbsolute
 
   test "should not throw an exception when creating a directory that already exists":
-    let dirRelative = "testDir5".Path
-    let dirAbsolute = testDirPath / dirRelative
-    fs.createDir(dirAbsolute)
-    fs.createDir(dirAbsolute)
+    let pathRelative = "testDir5".Path
+    let pathAbsolute = testDirPath / pathRelative
+    var dir = fs.createDir(pathAbsolute)
+    check dir.exists
+    dir = fs.createDir(pathAbsolute)
+    check dir.exists

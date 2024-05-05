@@ -16,34 +16,53 @@ suite "OsFs.dirExists":
     removeDir(testDirPath, false)
 
   test "should return true for existing directory when checking for absolute path":
-    let dirRelative = "dir1".Path
-    let dirAbsolute = testDirPath / dirRelative
-    fs.createDir(dirAbsolute)
-    check(fs.dirExists dirAbsolute)
+    let pathRelative = "dir1".Path
+    let pathAbsolute = testDirPath / pathRelative
+    let dir = fs.createDir(pathAbsolute)
+    check fs.dirExists pathAbsolute
+    check dir.exists
 
   test "should return true for existing directory when checking for relative path":
-    let dirRelative = "dir2".Path
-    let dirAbsolute = testDirPath / dirRelative
-    fs.createDir(dirAbsolute)
+    let pathRelative = "dir2".Path
+    let pathAbsolute = testDirPath / pathRelative
+    let dir = fs.createDir(pathAbsolute)
     fs.currentDir = testDirPath
-    check(fs.dirExists dirRelative)
+    check fs.dirExists pathRelative
+    check dir.exists
 
   test "should return false for non-existing directory when checking for absolute path":
-    let dirRelative = "dir3".Path
-    let dirAbsolute = testDirPath / dirRelative
-    check(not fs.dirExists dirAbsolute)
+    let pathRelative = "dir3".Path
+    let pathAbsolute = testDirPath / pathRelative
+    check not fs.dirExists pathAbsolute
+    let dir = fs.getDirHandle pathAbsolute
+    check not dir.exists
 
   test "should return false for non-existing directory when checking for relative path":
-    let dirRelative = "dir4".Path
+    let pathRelative = "dir4".Path
     fs.currentDir = testDirPath
-    check(not fs.dirExists dirRelative)
+    check not fs.dirExists pathRelative
+    let dir = fs.getDirHandle pathRelative
+    check not dir.exists
 
   test "should return false for file when checking for absolute path":
     let fileRelative = "dir5/file.txt".Path
     let fileAbsolute = testDirPath / fileRelative
     fs.currentDir = testDirPath
     fs.createDir("dir5".Path)
+    let dir = fs.getDirHandle(fileAbsolute)
     open(fileAbsolute.string, fmWrite).close()
-    check(not fs.dirExists fileAbsolute)
-    check(fs.fileExists fileAbsolute)
+    check not fs.dirExists fileAbsolute
+    check not dir.exists
+    check fs.fileExists fileAbsolute
+
+  test "should return false for file when checking for relative path":
+    let fileRelative = "dir6/file.txt".Path
+    let fileAbsolute = testDirPath / fileRelative
+    fs.currentDir = testDirPath
+    fs.createDir("dir6".Path)
+    let dir = fs.getDirHandle(fileRelative)
+    open(fileAbsolute.string, fmWrite).close()
+    check not fs.dirExists fileRelative
+    check not dir.exists
+    check fs.fileExists fileRelative
   

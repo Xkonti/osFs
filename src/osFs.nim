@@ -9,9 +9,12 @@ type
 proc newOsFs*(): FileSystem =
   result = new(OsFs)
 
-method createDirImpl(self: OsFs, absolutePath: Path) =
+method createDirImpl(self: OsFs, absolutePath: Path): Dir =
   try:
     createDir(absolutePath)
+    return self.getDirHandle(absolutePath)
+  except ValueError as e:
+    raise newException(InvalidPathError, "couldn't create directory handle due to invalid path: " & e.msg, e)
   except OSError as e:
     raise newException(FileSystemError, e.msg, e)
   except IOError as e:

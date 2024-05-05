@@ -18,17 +18,19 @@ suite "OsFs.createFile":
   test "should create a file with the given absolute path":
     let pathRelative = "testFile1.txt".Path
     let pathAbsolute = testDirPath / pathRelative
-    let file = fs.createFile(pathAbsolute)
-    check fs.fileExists(pathAbsolute)
+    let file = fs.createFile pathAbsolute
+    check fs.fileExists pathAbsolute
     check file.absolutePath == pathAbsolute
+    check file.exists
 
   test "should create a file with the given relative path":
     let pathRelative = "testFile2.txt".Path
     let pathAbsolute = testDirPath / pathRelative
     fs.currentDir = testDirPath
-    let file = fs.createFile(pathRelative)
-    check fs.fileExists(pathAbsolute)
+    let file = fs.createFile pathRelative
+    check fs.fileExists pathAbsolute
     check file.absolutePath == pathAbsolute
+    check file.exists
 
   test "should throw an error if a directory with the same name exists":
     let pathRelative = "testFile3".Path

@@ -18,14 +18,14 @@ suite "OsFs.removeFile":
   test "should remove a file using an absolute path":
     let pathRelative = "testFile1.jpg".Path
     let pathAbsolute = testDirPath / pathRelative
-    let file1 = fs.createFile(pathAbsolute)
+    let file1 = fs.createFile pathAbsolute
     check file1.exists
     fs.removeFile pathAbsolute
     check not file1.exists
 
-    let file2 = fs.createFile(pathAbsolute)
+    let file2 = fs.createFile pathAbsolute
     check file2.exists
-    file2.remove()
+    file2.remove
     check not file2.exists
 
   test "should remove a file using a relative path":
@@ -39,7 +39,7 @@ suite "OsFs.removeFile":
 
     let file2 = fs.createFile pathRelative
     check file2.exists
-    file2.remove()
+    file2.remove
     check not file2.exists
 
   test "should not throw an error if the file does not exist":
@@ -49,7 +49,7 @@ suite "OsFs.removeFile":
     fs.currentDir = testDirPath
     fs.removeFile pathRelative
     let file = fs.getFileHandle pathAbsolute
-    file.remove()
+    file.remove
 
   test "should throw an error if the path points to a directory":
     let pathRelative = "testDir1".Path
@@ -61,4 +61,4 @@ suite "OsFs.removeFile":
     
     let file = fs.getFileHandle pathAbsolute
     expect CatchableError:
-      file.remove()
+      file.remove
