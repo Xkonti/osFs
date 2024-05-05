@@ -1,0 +1,13 @@
+{
+    "[nim]": {
+        "editor.tabSize": 2
+    },
+    "nim.buildOnSave": false,
+    "nim.buildCommand": "c",
+    "nim.lintOnSave": true,
+    "nim.project": ["src/osFs.nim"],
+
+    "code-runner.executorMap": {
+        "nim": "nim compile -o:bin/ --verbosity:0 --hints:off --run",
+    },
+}
