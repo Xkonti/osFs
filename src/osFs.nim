@@ -48,3 +48,9 @@ method removeFileImpl(self: OsFs, absolutePath: Path) =
     removeFile(absolutePath)
   except OSError as e:
     raise newException(FileSystemError, e.msg, e)
+
+method readAllImpl(self: OsFs, absolutePath: Path): string =
+  try:
+    return readFile(absolutePath.string)
+  except IOError as e:
+    raise newException(FileSystemError, e.msg, e)
