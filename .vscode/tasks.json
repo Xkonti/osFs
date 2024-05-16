@@ -4,7 +4,7 @@
         {
             "label": "nim: run tests",
             "command": "nimble",
-            "args": ["test"],
+            "args": ["test", "-o:bin/"],
             "options": {
                 "cwd": "${workspaceRoot}"
             },
