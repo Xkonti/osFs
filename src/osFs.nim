@@ -72,7 +72,6 @@ method readStringBufferImpl(self: OsFs, absolutePath: Path, buffer: var string, 
     var bytesBuffer = newSeq[byte](length)
     let bytesRead = readBytes(file, bytesBuffer, 0, length)
     buffer.setLen 0
-    debugEcho "Bytes read: ", bytesRead
     for i in 0 ..< bytesRead:
       buffer.add char bytesBuffer[i]
     return bytesRead
@@ -83,23 +82,16 @@ method readStringBufferImpl(self: OsFs, absolutePath: Path, buffer: var string, 
 method getStringBufferedIteratorImpl(self: OsFs, absolutePath: Path, buffer: var string, start: int64, length: int64): StringBufferedIterator =
   iterator buffIterator(buffer: var string): int {.closure.} =
     try:
-      debugEcho "Starting interator. Length is: ", length
       let file = open(absolutePath.string, fmRead)
       defer: close(file)
       file.setFilePos start, fspSet
-
       # TODO: How to get rid of the buffer allocation here?
       var bytesBuffer = newSeq[byte](length)
-      
       while true:
         let bytesRead = readBytes(file, bytesBuffer, 0, length)
-        debugEcho "Read bytes: ", bytesRead
         buffer.setLen 0
-
         if bytesRead == 0:
-          debugEcho "Stopping the iterator: ", length
           break
-
         for i in 0 ..< bytesRead:
           buffer.add char bytesBuffer[i]
         yield bytesRead
